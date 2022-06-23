@@ -1,3 +1,3 @@
 #!/bin/sh
-rm -rf busybox-* isoimage linux-* syslinux-* rootfs ramfs
+rm -rf busybox-* linux-* syslinux-* x86_64-linux-musl-native rootfs ramfs isoimage
 
