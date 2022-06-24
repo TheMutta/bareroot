@@ -51,7 +51,6 @@ echo 'dmesg -n 6' >> init
 echo 'mount -t devtmpfs none /dev' >> init
 echo 'mount -t proc none /proc' >> init
 echo 'mount -t sysfs none /sys' >> init
-echo 'mdev -s' >> init
 echo 'mount /dev/sr0 /mnt' >> init
 echo 'mount /mnt/live/rootfs.sqsh /newroot' >> init
 
@@ -61,15 +60,17 @@ chmod +x init
 
 find . | cpio -R root:root -H newc -o | gzip > ../isoimage/ramfs.gz
 
-cd ../rootfs
-
-cp -rfv ../x86_64-linux-musl-native .
-cd bin
-ln -sf ../x86_64-linux-musl-native/bin/* ./
+cd ../rootfs/usr
+mv -fv ../../x86_64-linux-musl-native .
+mv -fv ./x86_64-linux-musl-native/bin/* bin/
+rm -drf ./x86_64-linux-musl-native/bin
+mv -fv ./x86_64-linux-musl-native/* .
+rm -drf ./x86_64-linux-musl-native
 cd ..
 
 ln -sf bin/busybox bin/init
 ln -sf bin/busybox init
+ln -sf usr/lib lib
 echo 'root:x:0:0::/:/bin/sh' > etc/passwd
 echo 'root:x:0:root' > etc/group
 echo 'root::$1$v9g8bFoY$aNvBpSVHKf4jGiqtwj.vr0:0:99999:7:::' > etc/shadow
