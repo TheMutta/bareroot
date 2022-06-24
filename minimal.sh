@@ -73,7 +73,7 @@ ln -sf bin/busybox init
 ln -sf usr/lib lib
 echo 'root:x:0:0::/:/bin/sh' > etc/passwd
 echo 'root:x:0:root' > etc/group
-echo 'root::$1$v9g8bFoY$aNvBpSVHKf4jGiqtwj.vr0:0:99999:7:::' > etc/shadow
+echo 'root::3ZD.JakwBsaYU:0:99999:7:::' > etc/shadow
 
 echo '::sysinit:/bin/dmesg -n 4' > etc/inittab
 echo '::sysinit:/bin/mount -t devtmpfs none /dev' >> etc/inittab
@@ -90,7 +90,6 @@ echo '::restart:/sbin/init' >> etc/inittab
 echo '::ctrlaltdel:/sbin/reboot' >> etc/inittab
 echo '::shutdown:/bin/umount -a -r' >> etc/inittab
 echo '::shutdown:/sbin/swapoff -a' >> etc/inittab
-chmod +x etc/inittab
 
 mkdir ../isoimage/live
 mksquashfs * ../isoimage/live/rootfs.sqsh
