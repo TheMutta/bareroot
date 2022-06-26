@@ -51,11 +51,11 @@ echo 'dmesg -n 6' >> init
 echo 'mount -t devtmpfs none /dev' >> init
 echo 'mount -t proc none /proc' >> init
 echo 'mount -t sysfs none /sys' >> init
-echo 'mount /dev/sr0 /mnt' >> init
+echo 'dmesg -n 3' >> init
+echo 'echo "Mount the drive at /mnt, then exit the shell."' >> init
+echo 'setsid cttyhack /bin/sh' >> init
 echo 'mount /mnt/live/rootfs.sqsh /newroot' >> init
-
 echo 'exec switch_root /newroot /init' >> init
-echo 'sedsid cttyhack /bin/sh' >> init # We should never get here
 chmod +x init
 
 find . | cpio -R root:root -H newc -o | gzip > ../isoimage/ramfs.gz
