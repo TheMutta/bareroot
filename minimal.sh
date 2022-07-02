@@ -47,7 +47,6 @@ mv -fv ../../x86_64-linux-musl-native .
 mv -fv ./x86_64-linux-musl-native/bin/* bin/
 rm -drf ./x86_64-linux-musl-native/bin
 mv -fv ./x86_64-linux-musl-native/* .
-rm -drf ./x86_64-linux-musl-native
 cd ..
 
 ln -sf bin/busybox bin/init
@@ -74,7 +73,7 @@ echo '::shutdown:/bin/umount -a -r' >> etc/inittab
 echo '::shutdown:/sbin/swapoff -a' >> etc/inittab
 
 mkdir ../isoimage/live
-mksquashfs * ../isoimage/live/rootfs.sqsh
+mksquashfs * ../isoimage/live/rootfs.sqsh -b 1048576 -comp xz
 cp -rvf ../isoimage/live ../ramfs/mnt/
 
 cd ../ramfs
