@@ -42,24 +42,6 @@ cd ..
 
 cp -rfv _install ../ramfs
 cp -rfv _install ../rootfs
-
-cd ../ramfs
-
-mkdir newroot
-echo '#!/bin/sh' > init
-echo 'dmesg -n 6' >> init
-echo 'mount -t devtmpfs none /dev' >> init
-echo 'mount -t proc none /proc' >> init
-echo 'mount -t sysfs none /sys' >> init
-echo 'dmesg -n 3' >> init
-echo 'echo "Mount the drive at /mnt, then exit the shell."' >> init
-echo 'setsid cttyhack /bin/sh' >> init
-echo 'mount /mnt/live/rootfs.sqsh /newroot' >> init
-echo 'exec switch_root /newroot /init' >> init
-chmod +x init
-
-find . | cpio -R root:root -H newc -o | gzip > ../isoimage/ramfs.gz
-
 cd ../rootfs/usr
 mv -fv ../../x86_64-linux-musl-native .
 mv -fv ./x86_64-linux-musl-native/bin/* bin/
@@ -93,17 +75,41 @@ echo '::shutdown:/sbin/swapoff -a' >> etc/inittab
 
 mkdir ../isoimage/live
 mksquashfs * ../isoimage/live/rootfs.sqsh
+cp -rvf ../isoimage/live ../ramfs/mnt/
+
+cd ../ramfs
+
+mkdir newroot
+echo '#! /bin/sh' > init
+echo 'dmesg -n 6' > init
+echo 'mount -t devtmpfs none /dev' >> init
+echo 'mount -t proc none /proc' >> init
+echo 'mount -t sysfs none /sys' >> init
+echo 'echo System status: ' >> init
+echo 'free -h' >> init
+echo 'read -p "Press any key to proceed..."' >> init
+echo 'mount /mnt/live/rootfs.sqsh /newroot' >> init
+echo 'exec switch_root /newroot /init' >> init
+chmod +x init
+
+find . | cpio -R root:root -H newc -o | gzip > ../isoimage/ramfs.gz
 
 cd ../linux-${KERNEL_VERSION}
-make CC=musl-gcc -j${CORES} mrproper defconfig
-cp -fv ../kconfig .config
-make CC=musl-gcc -j${CORES} bzImage
+make -j${CORES} mrproper
+cp -f ../kconfig .config
+make -j${CORES} all
 cp arch/x86/boot/bzImage ../isoimage/kernel.gz
 
 cd ../isoimage
 cp -vf ../syslinux-${SYSLINUX_VERSION}/bios/core/isolinux.bin .
 cp -vf ../syslinux-${SYSLINUX_VERSION}/bios/com32/elflink/ldlinux/ldlinux.c32 .
-echo 'default kernel.gz initrd=ramfs.gz' > ./isolinux.cfg
+cp -vf ../syslinux-${SYSLINUX_VERSION}/bios/com32/menu/menu.c32 .
+cp -vf ../syslinux-${SYSLINUX_VERSION}/bios/com32/libutil/libutil.c32 .
+echo 'UI menu.c32' > ./isolinux.cfg
+echo 'LABEL linux' >> ./isolinux.cfg
+echo '  MENU LABEL Boot the linux kernel' >> ./isolinux.cfg
+echo '  KERNEL kernel.gz' >> ./isolinux.cfg
+echo '  APPEND initrd=ramfs.gz rdinit=/bin/sh /init' >> ./isolinux.cfg
 
 rm -drf ../*.iso
 
