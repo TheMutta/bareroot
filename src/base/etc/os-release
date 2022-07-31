@@ -1,0 +1,7 @@
+NAME=Minimal
+ID=linux
+PRETTY_NAME="Minimal/Linux"
+ANSI_COLOR="1;31"
+HOME_URL="https://gitlab.com/sulinos/"
+SUPPORT_URL="https://gitlab.com/sulinos/"
+BUG_REPORT_URL="https://gitlab.com/sulinos/"

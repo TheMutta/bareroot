@@ -6,6 +6,8 @@ KERNEL_VERSION=5.17
 BUSYBOX_VERSION=1.35.0
 SYSLINUX_VERSION=6.03
 
+DROPBEAR_VERSION=2022.82
+
 if [ ! -f "kernel.tar.xz" ]; then
 	echo "Downloading the Linux kernel."
 	wget -O kernel.tar.xz http://kernel.org/pub/linux/kernel/v5.x/linux-${KERNEL_VERSION}.tar.xz
@@ -18,10 +20,15 @@ if [ ! -f "syslinux.tar.xz" ]; then
 	echo "Downloading Syslinux."
 	wget -O syslinux.tar.xz http://kernel.org/pub/linux/utils/boot/syslinux/syslinux-${SYSLINUX_VERSION}.tar.xz
 fi
+#if [ ! -f "dropbear.tar.bz2" ]; then
+#	echo "Downloading DropbearSSH."
+#	wget -O dropbear.tar.bz2 https://matt.ucc.asn.au/dropbear/releases/dropbear-${DROPBEAR_VERSION}.tar.bz2
+#fi
 
 tar -xvf kernel.tar.xz
 tar -xvf busybox.tar.bz2
 tar -xvf syslinux.tar.xz
+#tar -xvf dropbear.tar.bz2
 mkdir isoimage
 
 cd busybox-${BUSYBOX_VERSION}
@@ -35,26 +42,33 @@ mkdir dev proc sys etc mnt tmp
 cd ..
 
 cp -rfv _install ../ramfs
+
+#cd ../dropbear-${DROPBEAR_VERSION}
+#./configure --prefix=/ --enable-static --disable-zlib CC=musl-gcc LD=musl-gcc
+#make -j${CORES}
+#make DESTDIR=../ramfs install
+
 cd ../ramfs
 
+mkdir etc/init.d lib
 ln -sf bin/busybox bin/init
 ln -sf bin/busybox init
-ln -sf usr/lib lib
+
 echo 'root:x:0:0::/:/bin/sh' > etc/passwd
 echo 'root:x:0:root' > etc/group
 echo 'root::3ZD.JakwBsaYU:0:99999:7:::' > etc/shadow
 
-echo '::sysinit:/bin/dmesg -n 1' > etc/inittab
-echo '::sysinit:/bin/mount -t devtmpfs none /dev' >> etc/inittab
-echo '::sysinit:/bin/mount -t proc none /proc' >> etc/inittab
-echo '::sysinit:/bin/mount -t sysfs none /sys' >> etc/inittab
-# echo '::sysinit:/bin/mount -t tmpfs -o size=20m tmpfs /tmp' >> etc/inittab
-echo 'tty1::respawn:/sbin/getty 9600 tty1' >> etc/inittab
-echo 'tty2::respawn:/sbin/getty 9600 tty2' >> etc/inittab
-echo 'tty3::respawn:/sbin/getty 9600 tty3' >> etc/inittab
-echo 'tty4::respawn:/sbin/getty 9600 tty4' >> etc/inittab
-echo 'tty5::respawn:/sbin/getty 9600 tty5' >> etc/inittab
-echo 'tty6::respawn:/sbin/getty 9600 tty6' >> etc/inittab
+echo '#!/bin/sh' > etc/init.d/rcS
+echo '/bin/dmesg -n 1' >> etc/init.d/rcS
+echo '/bin/mount -t devtmpfs none /dev' >> etc/init.d/rcS
+echo '/bin/mount -t proc none /proc' >> etc/init.d/rcS
+echo '/bin/mount -t sysfs none /sys' >> etc/init.d/rcS
+chmod +x etc/init.d/rcS
+
+echo '::sysinit:/etc/init.d/rcS' > etc/inittab
+#echo 'tty1::askfirst:/sbin/getty 9600 tty1' >> etc/inittab
+#echo 'tty2::askfirst:/sbin/getty 9600 tty2' >> etc/inittab
+echo '::askfirst:-/bin/sh' >> etc/inittab
 echo '::restart:/sbin/init' >> etc/inittab
 echo '::ctrlaltdel:/sbin/reboot' >> etc/inittab
 echo '::shutdown:/bin/umount -a -r' >> etc/inittab

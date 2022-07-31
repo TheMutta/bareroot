@@ -1,0 +1,6 @@
+#!/bin/busybox ash
+mkdir -p /dev /sys /proc || true
+mount -t devtmpfs devtmpfs /dev
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+/bin/sh
