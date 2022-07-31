@@ -1,0 +1,3 @@
+devtmpfs	devtmpfs	/dev		defaults	0 0
+proc		proc		/proc		defaults	0 0
+sysfs		sysfs		/sys		defaults	0 0

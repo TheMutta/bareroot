@@ -1,7 +1,7 @@
-NAME=Minimal
-ID=linux
-PRETTY_NAME="Minimal/Linux"
+NAME=Bareroot
+ID=linux-bareroot
+PRETTY_NAME="Bareroot/Linux"
 ANSI_COLOR="1;31"
-HOME_URL="https://gitlab.com/sulinos/"
-SUPPORT_URL="https://gitlab.com/sulinos/"
-BUG_REPORT_URL="https://gitlab.com/sulinos/"
+HOME_URL="https://github.com/FilippoMutta"
+SUPPORT_URL="https://github.com/FilippoMutta"
+BUG_REPORT_URL="https://github.com/FilippoMutta"

@@ -1,6 +1,5 @@
 ##!/bin/bash
 set -e
-mksquashfs work/rootfs work/isoimage/root.sqsh -comp xz
 cd work/isoimage
 xorriso \
   -as mkisofs \
