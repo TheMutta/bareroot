@@ -16,7 +16,7 @@ pool=(src/base/build.mk `find src -type f -iname build.mk | sort -V `)
 mkdir -p work/isoimage work/rootfs work/initramfs
 
 # define variables
-export ISOWORK="$(realpath work/isoimage)"
+export OUTDIR="$(realpath work/out)"
 export INITRAMFS="$(realpath work/initramfs)"
 export DESTDIR="$(realpath work/rootfs)"
 
@@ -26,13 +26,13 @@ for operation in fetch build install ; do
     for pkg in ${pool[@]} ; do
         i=$(($i+1))
         module=$(basename $(dirname $pkg))
-        mkdir -p "$ISOWORK/../$module"
-        cd "$ISOWORK/../$module"
+        mkdir -p "$OUTDIR/../$module"
+        cd "$OUTDIR/../$module"
         if [[ ! -f .$operation ]] ; then
             echo -e "\033[32;1m$operation => $module\033[;0m"
             echo -e "\033]0;"[$i/${#pool[@]}] $operation: $module"\007"
             cp -prf $(dirname "../../$pkg*")/* .
-            yes "" | make -f "../../$pkg" $operation ISOWORK=$ISOWORK INITRAMFS=$INITRAMFS DESTDIR=$DESTDIR
+            yes "" | make -f "../../$pkg" $operation OUTDIR=$OUTDIR INITRAMFS=$INITRAMFS DESTDIR=$DESTDIR
             touch .$operation
         fi
     done

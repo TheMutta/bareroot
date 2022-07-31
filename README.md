@@ -1,13 +1,15 @@
 # Bareroot
-A simple script that creates a minimal functional Linux OS.
+Bareroot is a simple system to create a minimal Linux OS. It uses multiple  
+submakefiles to flexibly compile all the needed packages.  
 
 ## Prerequisites
-Musl is required to compile Busybox and the Linux kernel, but it may be substituted with glibc.
-To do a test run, qemu is required.
+Make and bash are required, plus a gcc-compatible compiler and all the  
+dependencies required for compiling the various modules.  
 
 ## Make
-Just run `clean.sh` to clean the directory (otherwise compilation will not work).
-Then, run the compilation with `minimal.sh`.
+To compile everything and generate Linux, Initrd and Rootfs images for the  
+x86_64 architecture just use the command `make build-x86_64`.  
+The resulting images will be found in the `work/out` folder.
 
 ## Run
 To do a test run, just run the `qemu64.sh` script.

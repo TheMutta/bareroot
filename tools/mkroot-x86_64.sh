@@ -9,3 +9,4 @@ sudo cp -vrp work/rootfs/* work/rootimg/
 sudo mkdir -p work/rootimg/sys work/rootimg/dev work/rootimg/proc
 sudo umount work/rootimg
 rm -drf work/rootimg
+mv -f root.ext4 work/out

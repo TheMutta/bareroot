@@ -12,6 +12,6 @@ build:
 install:
 	mkdir -p $(DESTDIR)/lib/modules $(DESTDIR)/boot/
 	install arch/x86/boot/bzImage $(DESTDIR)/boot/vmlinuz-$(VERSION)
-	install arch/x86/boot/bzImage $(ISOWORK)/linux
+	install arch/x86/boot/bzImage $(OUTDIR)/linux
 	make modules_install INSTALL_MOD_PATH=$(DESTDIR) -j`nproc`
 	

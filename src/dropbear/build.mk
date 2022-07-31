@@ -9,4 +9,3 @@ build:
 
 install:
 	make install -j`nproc`
-	install 50-dropbear $(DESTDIR)/etc/31.d/

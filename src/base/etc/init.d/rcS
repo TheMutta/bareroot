@@ -4,3 +4,7 @@ if [ ! -f /etc/dropbear/dropbear_hostkey_ed255 ] ; then
     dropbearkey -t ed25519 -f /etc/dropbear/dropbear_hostkey_ed255
 fi
 dropbear -R -E -B -p 22
+
+mount -t devtmpfs devtmpfs /dev
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys

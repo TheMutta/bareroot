@@ -13,4 +13,4 @@ done
 depmod --all --basedir=work/initramfs $kernel
 cd work/initramfs
 chroot . /bin/busybox --install -s /bin
-find . -print0 | cpio --null --create --verbose --format=newc > ../isoimage/initrd.img
+find . -print0 | cpio --null --create --verbose --format=newc > ../out/initrd.img
