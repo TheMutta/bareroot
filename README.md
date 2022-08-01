@@ -12,4 +12,4 @@ x86_64 architecture just use the command `make build-x86_64`.
 The resulting images will be found in the `work/out` folder.
 
 ## Run
-To do a test run, just run the `qemu64.sh` script.
+To do a test run, just run `make qemu-x86_64` script.
