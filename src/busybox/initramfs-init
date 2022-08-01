@@ -1,6 +1,16 @@
 #!/bin/busybox ash
-mkdir -p /dev /sys /proc || true
+mkdir -p /dev /sys /proc /run /newroot || true
 mount -t devtmpfs devtmpfs /dev
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
+mount -t tmpfs tmpfs /tmp
+
+mount /dev/sda /newroot
+
+mount --move /sys /newroot/sys
+mount --move /proc /newroot/proc
+mount --move /dev /newroot/dev
+mount --move /run /newroot/run
+
+exec switch_root -c /dev/console /newroot /bin/init
 /bin/sh

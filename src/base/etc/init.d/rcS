@@ -1,10 +1,37 @@
 #!/bin/sh
+
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+BLUE=$(tput setaf 4)
+WHITE=$(tput setaf 7)
+
+dmesg -n 1
+clear
+
+printf "%s\n" "${BLUE}[START]${WHITE} Initializing system..."
+
+printf "%s\n" "${BLUE}[START]${WHITE} Starting udev daemon..."
+nohup /sbin/udevd > /dev/null &
+pidof udevd
+if [ $? -eq 0 ] ; then
+	printf "%s\n" "${GREEN}[OK]${WHITE} Started udev daemon."
+else
+	printf "%s\n" "${RED}[FAIL]${WHITE} Failed to start udev daemon."
+fi
+
+printf "%s\n" "${BLUE}[START]${WHITE} Starting dropbear key generation..."
 if [ ! -f /etc/dropbear/dropbear_hostkey_ed255 ] ; then
-    mkdir -p /etc/dropbear/
+    mkdir -p /etc/dropbear/ 1>/dev/null
     dropbearkey -t ed25519 -f /etc/dropbear/dropbear_hostkey_ed255
 fi
-dropbear -R -E -B -p 22
+printf "%s\n" "${GREEN}[OK]${WHITE} Dropbear key generated."
+printf "%s\n" "${BLUE}[START]${WHITE} Starting dropbear..."
+dropbear -R -E -B -p 22 1>/dev/null
+pidof dropbear
+if [ $? -eq 0 ] ; then
+	printf "%s\n" "${GREEN}[OK]${WHITE} Started dropbear."
+else
+	printf "%s\n" "${RED}[FAIL]${WHITE} Failed to start dropbear."
+fi
 
-mount -t devtmpfs devtmpfs /dev
-mount -t proc proc /proc
-mount -t sysfs sysfs /sys
+printf "%s\n" "${GREEN}[DONE]${WHITE} System initialized."

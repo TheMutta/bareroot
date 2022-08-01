@@ -11,10 +11,9 @@ rebuild-x86_64:
 
 reinstall-x86_64:
 	rm -fvr work/*/.install work/rootfs work/out work/initramfs work/rootimg
-	make build
+	make build-x86_64
 
 qemu-x86_64:
-	qemu-system-x86_64 -m 64M -cdrom live.iso -hda root.ext4 -boot d -vga std -enable-kvm
-
+	qemu-system-x86_64 -m 64M -kernel work/out/linux -initrd work/out/initrd.img -hda work/out/root.ext4 -enable-kvm
 clean:
 	rm -rf work

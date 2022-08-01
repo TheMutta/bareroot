@@ -8,3 +8,4 @@ install:
 	ln -s sbin $(DESTDIR)/libexec || true
 	cp -prfv etc $(DESTDIR)
 	chmod 600 $(DESTDIR)/etc/shadow
+	chmod 111 $(DESTDIR)/etc/init.d/rcS
