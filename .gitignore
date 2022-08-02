@@ -1,3 +1,3 @@
-*.bz2
-*.xz
+/work
 *.iso
+*.ext4
