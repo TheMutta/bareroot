@@ -3,7 +3,7 @@
 ::shutdown:/sbin/swapoff -a
 ::shutdown:/bin/umount -a -r
 ::restart:/sbin/init
-::askfirst:/bin/sh
-tty2::askfirst:/bin/sh
-tty3::askfirst:/bin/sh
-tty4::askfirst:/bin/sh
+tty1::askfirst:/sbin/agetty 9600 tty1
+tty2::askfirst:/sbin/agetty 9600 tty2
+tty3::askfirst:/sbin/agetty 9600 tty3
+tty4::askfirst:/sbin/agetty 9600 tty4

@@ -12,12 +12,7 @@ printf "%s\n" "${BLUE}[START]${WHITE} Initializing system..."
 
 printf "%s\n" "${BLUE}[START]${WHITE} Starting udev daemon..."
 nohup /sbin/udevd > /dev/null &
-pidof udevd
-if [ $? -eq 0 ] ; then
-	printf "%s\n" "${GREEN}[OK]${WHITE} Started udev daemon."
-else
-	printf "%s\n" "${RED}[FAIL]${WHITE} Failed to start udev daemon."
-fi
+
 
 printf "%s\n" "${BLUE}[START]${WHITE} Starting dropbear key generation..."
 if [ ! -f /etc/dropbear/dropbear_hostkey_ed255 ] ; then
@@ -27,6 +22,14 @@ fi
 printf "%s\n" "${GREEN}[OK]${WHITE} Dropbear key generated."
 printf "%s\n" "${BLUE}[START]${WHITE} Starting dropbear..."
 dropbear -R -E -B -p 22 1>/dev/null
+
+pidof udevd
+if [ $? -eq 0 ] ; then
+	printf "%s\n" "${GREEN}[OK]${WHITE} Started udev daemon."
+else
+	printf "%s\n" "${RED}[FAIL]${WHITE} Failed to start udev daemon."
+fi
+
 pidof dropbear
 if [ $? -eq 0 ] ; then
 	printf "%s\n" "${GREEN}[OK]${WHITE} Started dropbear."

@@ -3,7 +3,7 @@ mkdir -p /dev /sys /proc /run /newroot || true
 mount -t devtmpfs devtmpfs /dev
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
-mount -t tmpfs tmpfs /tmp
+mount -t tmpfs tmpfs /run
 
 mount /dev/sda /newroot
 

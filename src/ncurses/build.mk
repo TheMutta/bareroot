@@ -1,4 +1,4 @@
-VERSION=6.2
+VERSION=6.3
 V=6
 fetch:
 	wget -c https://ftp.gnu.org/pub/gnu/ncurses/ncurses-$(VERSION).tar.gz
